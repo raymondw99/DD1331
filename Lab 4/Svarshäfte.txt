@@ -1,0 +1,51 @@
+#Uppgift 4
+Hur många jämförelser kan man maximalt, minimalt vänta sig vid linjärsökning respektive binärsökning i en sorterad lista med n st element. 
+Om n = 2511?
+
+Vid binär sökning motsvarar det maximala antalet jämförelser Log2(n) avrundat uppåt, där n anger antal uppslagsord. Log2(2511) ≈ 
+11.2940463133, vilket innebär att maximalt antal jämförelser i detta fall motsvarar 12. Minimalt antal jämförelser är 1, då det inmatade 
+ordet möjligen skulle befinna sig i början av intervallhalveringen, vilket i detta fall är "moral". För linjär sökning motsvarar maximalt 
+antal jämförelser n (i detta fall 2511, eftersom algoritmen jämför jämför ord var och för sig till skillnad från binärsökningens 
+intervallhalveringar. Minimalt antal jämförelser motsvarar 1 eftersom det sökta ordet skulle kunna befinna sig först i listan. Alltså ser 
+vi att binär sökning är mycket mer effektiv än linjär sökning, speciellt med avseende till långa listor där många ord ska jämföras. 
+
+
+#Uppgift 5
+Kopieras listan som pekas ut av v vid ett anrop till br_search? Hur är det med anrop till helper? Peka ut basfall och rekursivt anrop i 
+koden. Skriptet körs genom anrop av test_br_search(), där listan v skapas därefter genom iteration vid antal TEST_SIZE. Därefter, för alla 
+element (current) i listan kommer programmet att evaluera anropet och fortsätta om br_search ger påstående True. Detta beror på att 
+current motsvarar target. Den genererade listan kopieras då och sätts som argument (listan som ska undersökas) i funktionen br_search. 
+Funktionen anropar därefter helper vilket i sin tur anropas rekursivt i sig själv så länge villkoret v[mid] == target inte är uppfyllt. 
+Med andra ord påbörjar anropet till helper i br_search den rekursiva sökningen eftersom funktionen helper i sig är rekursiv och anropar 
+sig själv tills det specifika villkoret blir uppfyllt. 
+
+
+def br_search(v, target):
+    """Returns True if the sorted list v contains target and False otherwise. 
+    Undefined behaviour if v is not sorted"""
+    return helper(v, 0, len(v), target)
+
+
+def helper(v, start, end, target):
+    if start > end or start >= len(v):
+        return False
+    mid = (start+end) // 2
+    if v[mid] == target: #Basfall, returnerar True och avbryter rekursiva anrop när villkoret blir uppfyllt
+        return True
+    if v[mid] < target:
+        return helper(v, mid+1, end, target) #Rekusrivt anrop, 
+    else:
+        return helper(v, start, mid-1, target) #Rekursivt anrop
+
+    #Funktionen anropar sig rekursivt så länge villkoret v[mid] == target inte blir uppfyllt, alltså om elementet (target) 
+     Inte har blivit funnet
+
+def test_br_search(): 
+    TEST_SIZE = 10
+    for length in range(TEST_SIZE):
+        v = []
+        for i in range(length):
+            v.append(i)
+        for current in v:
+            assert br_search(v, current)
+        assert not br_search(v, TEST_SIZE)
